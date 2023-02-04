@@ -1,36 +1,53 @@
 <template>
-  <div class="counter_wrapper">
-    <div class="counter_num">
-      Counter: <span>{{ counter }}</span>
-    </div>
-    <div class="buttons">
-      <button class="btn btn-blue" @click="increment">Increment</button>
-      <button class="btn btn-green" @click="decrement">Decrement</button>
-      <button class="btn btn-yellow" @click="reset">Reset</button>
-    </div>
+  <div class="wrapper">
+    <img class="setting" src="@/assets/svg/gear.svg" alt="gear" />
+    <weather-card />
+    <weather-card />
+    <weather-card />
   </div>
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from 'vue'
+import { getCurrentLocation } from '@/use/currentLocation'
+
+import WeatherCard from '@/components/weather-card/WeatherCard.vue'
+import axios from 'axios'
 
 export default {
+  components: { WeatherCard },
   setup() {
-    const counter = ref(0);
+    const stringQuery = ref('')
+    const iconUrl = ref(`http://openweathermap.org/img/wn/`)
+    async function fetchWeatherData(): Promise<any> {
+      const { location, locationError } = getCurrentLocation()
+      if (Object.keys(location).length > 0) {
+        const url = `https://api.openweathermap.org/data/2.5/weather`
+        const { data } = await axios.get(url, {
+          params: {
+            units: 'metric',
+            // lat: location.latitude,
+            // lon: location.longitude,
+            appid: process.env.VUE_APP_API_KEY,
+            q: 'New York',
+          },
+        })
+        iconUrl.value = `${iconUrl.value}${data.weather[0].icon}.png`
+        console.log(data)
+      }
+    }
 
-    const increment = (): number => counter.value++;
-    const decrement = (): number => (counter.value > 0 ? counter.value-- : 0);
-    const reset = (): number => (counter.value = 0);
+    onMounted(async () => {
+      await fetchWeatherData()
+    })
+
     return {
-      counter,
-      increment,
-      decrement,
-      reset,
-    };
+      iconUrl,
+    }
   },
-};
+}
 </script>
 
 <style lang="scss">
-@import "./assets/main.scss";
+@import '@/assets/scss/main.scss';
 </style>

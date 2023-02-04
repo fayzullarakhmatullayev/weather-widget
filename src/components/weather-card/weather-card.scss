@@ -1,0 +1,49 @@
+.card {
+  &:not(:last-child) {
+    border-bottom: 1px solid #ccc;
+  }
+  padding: 1rem;
+  &-city {
+    width: 90%;
+    font-weight: 700;
+  }
+  &-temp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+    &__img {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        transform: scale(1.5);
+        width: 100%;
+        height: 100%;
+      }
+    }
+    h2 {
+      font-size: 3rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+  }
+  &-nav {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    span {
+      width: calc(50% - 10px);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      img {
+        width: 25px;
+        height: 25px;
+      }
+    }
+  }
+}

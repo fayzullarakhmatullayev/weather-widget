@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+.wrapper {
+  width: 300px;
+  margin: 20px;
+  position: relative;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  .setting {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
+}
+
+@import '@/components/weather-card/weather-card.scss';
