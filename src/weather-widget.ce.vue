@@ -1,51 +1,41 @@
 <template>
   <div class="wrapper">
-    <img class="setting" src="@/assets/svg/gear.svg" alt="gear" />
-    <weather-card />
-    <weather-card />
-    <weather-card />
+    <button class="setting">
+      <img src="@/assets/svg/gear.svg" alt="gear" @click="isSettingsOpen = !isSettingsOpen" />
+    </button>
+    <div class="cities">
+      <template v-if="cityLocations.length > 0">
+        <Suspense>
+          <weather-card v-for="city in cityLocations" :city="city" :key="city.latitude" />
+        </Suspense>
+      </template>
+
+      <div class="no-location" v-else>Provide your location</div>
+    </div>
+    <settings-board v-if="isSettingsOpen" />
   </div>
 </template>
 
-<script lang="ts">
-import { onMounted, ref } from 'vue'
-import { getCurrentLocation } from '@/use/currentLocation'
+<script lang="ts" setup>
+import { onMounted, reactive, ref } from 'vue'
+import { getCurrentLocation } from '@/services/getUserLocation'
+import WeatherCard from '@/components/weather-card/weather-card.vue'
+import SettingsBoard from '@/components/settings-board/settings-board.vue'
 
-import WeatherCard from '@/components/weather-card/WeatherCard.vue'
-import axios from 'axios'
+const cityLocations = reactive<any>(JSON.parse(localStorage.getItem('cityLocations') || '[]'))
+const isSettingsOpen = ref(false)
 
-export default {
-  components: { WeatherCard },
-  setup() {
-    const stringQuery = ref('')
-    const iconUrl = ref(`http://openweathermap.org/img/wn/`)
-    async function fetchWeatherData(): Promise<any> {
-      const { location, locationError } = getCurrentLocation()
-      if (Object.keys(location).length > 0) {
-        const url = `https://api.openweathermap.org/data/2.5/weather`
-        const { data } = await axios.get(url, {
-          params: {
-            units: 'metric',
-            // lat: location.latitude,
-            // lon: location.longitude,
-            appid: process.env.VUE_APP_API_KEY,
-            q: 'New York',
-          },
-        })
-        iconUrl.value = `${iconUrl.value}${data.weather[0].icon}.png`
-        console.log(data)
+onMounted(() => {
+  if (!cityLocations.length) {
+    getCurrentLocation()
+    setTimeout(() => {
+      let userCityLocation = reactive<any>(JSON.parse(localStorage.getItem('position') || '{}'))
+      if (Object.keys(userCityLocation).length > 0) {
+        cityLocations.push(userCityLocation)
       }
-    }
-
-    onMounted(async () => {
-      await fetchWeatherData()
-    })
-
-    return {
-      iconUrl,
-    }
-  },
-}
+    }, 300)
+  }
+})
 </script>
 
 <style lang="scss">
