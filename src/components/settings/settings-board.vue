@@ -7,17 +7,19 @@
       </button>
     </div>
     <ul class="settings-cities">
-      <li class="settings-cities__list" v-for="city in cityLocations" :key="city.id">
-        <div class="settings-cities__left">
-          <button class="settings-cities__drag">
-            <img src="@/assets/svg/menu.svg" alt="menu" />
+      <draggable :list="cityLocations">
+        <li class="settings-cities__list" v-for="city in cityLocations" :key="city.id">
+          <div class="settings-cities__left">
+            <button class="settings-cities__drag">
+              <img src="@/assets/svg/menu.svg" alt="menu" />
+            </button>
+            <p>{{ city.name }}, {{ city.sys.country }}</p>
+          </div>
+          <button class="settings-cities__delete" @click="emit('deleteHandler', city.id)">
+            <img src="@/assets/svg/trash.svg" alt="trash" />
           </button>
-          <p>{{ city.name }}, {{ city.sys.country }}</p>
-        </div>
-        <button class="settings-cities__delete" @click="emit('deleteHandler', city.id)">
-          <img src="@/assets/svg/trash.svg" alt="trash" />
-        </button>
-      </li>
+        </li>
+      </draggable>
     </ul>
     <form class="settings-form" @submit.enter.prevent="submitHandler">
       <p>Add Location</p>
@@ -39,13 +41,18 @@
 
 <script lang="ts" setup>
 import { IWeatherType } from '@/types/weatherDataTypes'
-import { PropType, ref, defineEmits, defineProps } from 'vue'
+import { PropType, ref, defineEmits, defineProps, watch } from 'vue'
+import { VueDraggableNext as draggable } from 'vue-draggable-next'
 
 const emit = defineEmits(['close', 'submitHandler', 'deleteHandler'])
-defineProps({
+const props = defineProps({
   cityLocations: {
     type: Array as PropType<IWeatherType[]>,
   },
+})
+
+watch(props.cityLocations as IWeatherType[], (value) => {
+  localStorage.setItem('cityLocations', JSON.stringify(value))
 })
 
 const isEmpty = ref(false)

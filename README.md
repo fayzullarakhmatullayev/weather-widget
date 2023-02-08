@@ -1,24 +1,28 @@
-# vue-weather-widget
+# Виджет погоды
 
-## Project setup
+## Для установки проекта используйте команду
+
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Компилируется и загружается в процессе разработки
+
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Компилирует и минифицирует для использования
+
 ```
-npm run build
+npm run build:wc
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+### Пример добавления веб-компонента в ваш проект
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+```
+<weather-widget />
+
+<script src="wather-widget.umd.js"></script>
+
+```
