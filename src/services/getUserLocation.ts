@@ -1,4 +1,4 @@
-export function getCurrentLocation(): any {
+export function getCurrentLocation(): void {
   const options = {
     enableHighAccuracy: true,
     timeout: 5000,
@@ -9,8 +9,8 @@ export function getCurrentLocation(): any {
     localStorage.setItem(
       'position',
       JSON.stringify({
-        latitude: pos.coords.latitude,
-        longitude: pos.coords.longitude,
+        lat: pos.coords.latitude,
+        lon: pos.coords.longitude,
       })
     )
   }
