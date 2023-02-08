@@ -23,6 +23,6 @@ npm run build:wc
 ```
 <weather-widget />
 
-<script src="wather-widget.umd.js"></script>
+<script src="weather-widget.umd.js"></script>
 
 ```
