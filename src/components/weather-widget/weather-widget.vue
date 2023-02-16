@@ -8,7 +8,7 @@
         <weather-card v-for="city in cityLocations" :city="city" :key="city.id" />
       </template>
 
-      <div class="no-location" v-else>Enter a city</div>
+      <div class="no-location" v-else>Enter a city name</div>
     </div>
     <settings-board
       v-if="isSettingsOpen"
